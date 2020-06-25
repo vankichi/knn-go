@@ -23,13 +23,12 @@ type Set struct {
 	Train []*loader.Object
 }
 
-func (s *Set) L2() ([]*nn, error) {
-	var res []*nn
-	var err error = nil
+func (s *Set) L2() (res []*nn, err error) {
+	res = make([]*nn, 0, len(s.Train))
 	for _, t := range s.Train {
 		if len(t.Vector) != len(s.Vector) {
 			glg.Error("vector size is not equal")
-			panic("vector size is not equal")
+			return nil, err
 		}
 		var d float64 = 0
 		for i := 0; i < len(s.Vector); i++ {
@@ -46,17 +45,13 @@ func (s *Set) L2() ([]*nn, error) {
 
 func Knn(n []*nn, k int32) []*nn {
 	sort.Slice(n, func(i, j int) bool {
-		if n[i].Distance < n[j].Distance {
-			return true
-		}
-		return false
+		return n[i].Distance < n[j].Distance
 	})
-	knn := n[:k+1]
-	return knn
+	return n[:k+1]
 }
 
 func PreClass(knn []*nn) string {
-	var l []string
+	l := make([]string, 0, len(knn))
 	// pick up class name
 	for _, n := range knn {
 		if !util.StrContains(l, n.Class) {
@@ -68,7 +63,7 @@ func PreClass(knn []*nn) string {
 		name  string
 		count int
 	}
-	var re []*r
+	re := make([]*r, 0, len(l))
 	for _, c := range l {
 		var count int = 0
 		for _, n := range knn {
@@ -83,10 +78,7 @@ func PreClass(knn []*nn) string {
 	}
 
 	sort.Slice(re, func(i, j int) bool {
-		if re[i].count > re[j].count {
-			return true
-		}
-		return false
+		return re[i].count > re[j].count
 	})
 	return re[0].name
 }
