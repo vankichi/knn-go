@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/kpango/glg"
 	"github.com/vankichi/knn-go/knn"
 	"github.com/vankichi/knn-go/loader"
@@ -11,7 +9,7 @@ import (
 const ratio float64 = 0.1
 
 const file = "assets/iris.data"
-const K int32 = 2
+const K int32 = 3
 
 func main() {
 	d, err := loader.New(file)
@@ -28,11 +26,17 @@ func main() {
 			panic(err)
 		}
 		list := knn.Knn(nn, K)
+
+		glg.Infof("test data vector: %v", set.Vector)
+		for i := 0 ; i < int(K) ; i++ {
+			glg.Infof("%dnn vector : { class: %s, distance: %.5f }", i+1, list[i].Class, list[i].Distance)
+		}
 		pc := knn.PreClass(list)
 		if set.Class == pc {
 			precision++
 		}
+		glg.Infof("{correct ClaasName: %s, predicted ClassName: %s}", set.Class, pc)
 	}
 	precision = precision / float64(len(test))
-	fmt.Println(precision)
+	glg.Infof("accuracy: %.2f", precision)
 }

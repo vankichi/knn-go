@@ -13,7 +13,7 @@ import (
 type nn struct {
 	ID       int32
 	Class    string
-	distance float64
+	Distance float64
 }
 
 var list []nn
@@ -38,7 +38,7 @@ func (s *Set) L2() ([]*nn, error) {
 		res = append(res, &nn{
 			ID:       t.ID,
 			Class:    t.Class,
-			distance: math.Sqrt(d),
+			Distance: math.Sqrt(d),
 		})
 	}
 	return res, err
@@ -46,7 +46,7 @@ func (s *Set) L2() ([]*nn, error) {
 
 func Knn(n []*nn, k int32) []*nn {
 	sort.Slice(n, func(i, j int) bool {
-		if n[i].distance < n[j].distance {
+		if n[i].Distance < n[j].Distance {
 			return true
 		}
 		return false
