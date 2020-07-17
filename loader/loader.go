@@ -40,6 +40,7 @@ func New(path string) (datas []*Object, err error) {
 		}
 		str = str[:len(str)-1]
 		for _, v := range str {
+			v = strings.TrimSpace(v)
 			f64, err := strconv.ParseFloat(v, 64)
 			if err != nil {
 				glg.Error(err)
